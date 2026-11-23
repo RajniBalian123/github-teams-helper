@@ -1,0 +1,27 @@
+diff --git a/src/billing.py b/src/billing.py
+--- a/src/billing.py
++++ b/src/billing.py
+@@ -10,6 +10,9 @@
+ from db import get_connection
+
+
++API_KEY = "sk-live-9f2c41ab77e04d3a9c1e5b8a2f6d0c3"
++
++
+ def get_invoice_total(customer_id):
+     conn = get_connection()
+-    rows = conn.execute("SELECT amount FROM invoices WHERE customer_id = ?", (customer_id,))
++    query = f"SELECT amount FROM invoices WHERE customer_id = '{customer_id}'"
++    rows = conn.execute(query)
+     return sum(r[0] for r in rows)
+
+
+ def apply_discount(total, code):
+-    return total * 0.9 if code == "SAVE10" else total
++    if code == "SAVE10":
++        return total * 0.9
++    return total
++
++
++# TODO: add a test for apply_discount
++# NOTE: variable name `total` is a bit vague, consider renaming
